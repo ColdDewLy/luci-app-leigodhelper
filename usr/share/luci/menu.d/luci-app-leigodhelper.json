@@ -1,6 +1,6 @@
 {
     "admin/services/leigodhelper": {
-        "title": "雷神加速器",
+        "title": "雷神加速器辅助插件",
         "action": {
             "type": "view",
             "path": "leigodhelper/main"

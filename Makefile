@@ -13,13 +13,13 @@ define Package/luci-app-leigodhelper
   SECTION:=luci
   CATEGORY:=LuCI
   SUBMENU:=3. Applications
-  TITLE:=LuCI Support for Leigod Accelerator Helper
+  TITLE:=LuCI Support for Leigod Accelerator Helper (雷神加速器辅助插件)
   DEPENDS:=+luci-base +iptables +ipset +curl
   PKGARCH:=all
 endef
 
 define Package/luci-app-leigodhelper/description
-  LuCI interface for Leigod Accelerator Helper sync script.
+  雷神加速器辅助插件是一款针对雷神官方openwrt加速插件的监控辅助插件。
 endef
 
 define Build/Compile

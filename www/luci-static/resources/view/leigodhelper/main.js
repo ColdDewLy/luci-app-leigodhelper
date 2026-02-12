@@ -25,9 +25,9 @@ function renderStatus(data) {
     if (isRunning) {
         var color = (mode === 'OFF') ? 'orange' : 'green';
         var statusText = (mode === 'OFF') ? '运行中 (无加速任务)' : '运行中' + ' (' + mode + ')';
-        renderHTML = spanTemp.format(color, '雷神加速器', statusText);
+        renderHTML = spanTemp.format(color, '雷神加速器辅助插件', statusText);
     } else {
-        renderHTML = spanTemp.format('red', '雷神加速器', '未运行');
+        renderHTML = spanTemp.format('red', '雷神加速器辅助插件', '未运行');
     }
     return renderHTML;
 }
@@ -96,7 +96,7 @@ return view.extend({
     render: function(data) {
         var m, s, o;
 
-        m = new form.Map('leigodhelper', '雷神加速器', '雷神加速器是一款针对 OpenWrt 的游戏加速插件。');
+        m = new form.Map('leigodhelper', '雷神加速器辅助插件', '雷神加速器辅助插件是一款针对雷神官方openwrt加速插件的监控辅助插件。');
 
         // Status Section
         s = m.section(form.TypedSection);
