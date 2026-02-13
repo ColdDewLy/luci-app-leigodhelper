@@ -8,6 +8,7 @@ function index()
     entry({"admin", "services", "leigodhelper", "get_data"}, call("action_get_data")).leaf = true
     entry({"admin", "services", "leigodhelper", "install"}, call("action_install")).leaf = true
     entry({"admin", "services", "leigodhelper", "get_log"}, call("action_get_log")).leaf = true
+    entry({"admin", "services", "leigodhelper", "get_install_log"}, call("action_get_install_log")).leaf = true
     entry({"admin", "services", "leigodhelper", "clear_log"}, call("action_clear_log")).leaf = true
 end
 
@@ -19,11 +20,26 @@ function action_install()
     sys.exec("echo 'Starting installation...' > /tmp/leigodhelper_install.log")
 
     -- Run install command in background
-    local cmd = 'cd /tmp && (curl -fsSL http://119.3.40.126/router_plugin_new/plugin_install.sh -o plugin_install.sh && sh plugin_install.sh) >> /tmp/leigodhelper_install.log 2>&1 &'
+    local cmd = 'cd /tmp && sh -c "$(curl -fsSL http://119.3.40.126/router_plugin_new/plugin_install.sh)" >> /tmp/leigodhelper_install.log 2>&1 &'
     sys.exec(cmd)
 
     http.prepare_content("application/json")
     http.write('{"status":"success"}')
+end
+
+function action_get_install_log()
+    local http = require "luci.http"
+    local sys = require "luci.sys"
+
+    local log_file = "/tmp/leigodhelper_install.log"
+    local content = sys.exec("tail -n 500 " .. log_file .. " 2>/dev/null")
+
+    http.prepare_content("text/plain")
+    if content == "" then
+        http.write("Waiting for installation log...\n")
+    else
+        http.write(content)
+    end
 end
 
 function action_get_log()
@@ -31,7 +47,7 @@ function action_get_log()
     local sys = require "luci.sys"
 
     local log_file = "/tmp/leigodhelper.log"
-    local content = sys.exec("tail -c 10240 " .. log_file .. " 2>/dev/null")
+    local content = sys.exec("tail -n 500 " .. log_file .. " 2>/dev/null")
 
     http.prepare_content("text/plain")
     if content == "" then

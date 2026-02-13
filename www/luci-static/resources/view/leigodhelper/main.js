@@ -64,10 +64,18 @@ function handleInstall() {
                             modalBody.appendChild(E('div', { class: 'right', style: 'margin-top: 10px;' }, [ closeBtn ]));
 
                             logScrollInterval = setInterval(function() {
-                                request.get(L.url('admin/services/leigodhelper/get_log')).then(function(logRes) {
+                                request.get(L.url('admin/services/leigodhelper/get_install_log')).then(function(logRes) {
                                     if (logRes.status === 200) {
+                                        var atBottom = (logArea.scrollHeight - logArea.scrollTop - logArea.clientHeight) < 20;
+                                        var oldScrollTop = logArea.scrollTop;
+
                                         logArea.innerText = logRes.responseText;
-                                        logArea.scrollTop = logArea.scrollHeight;
+
+                                        if (atBottom) {
+                                            logArea.scrollTop = logArea.scrollHeight;
+                                        } else {
+                                            logArea.scrollTop = oldScrollTop;
+                                        }
                                     }
                                 });
                             }, 1000);
@@ -213,8 +221,18 @@ return view.extend({
             var updateLog = function() {
                 return request.get(L.url('admin/services/leigodhelper/get_log')).then(function(res) {
                     if (res.status === 200 && logTextarea) {
+                        // checking if user is at the bottom before update
+                        var atBottom = (logTextarea.scrollHeight - logTextarea.scrollTop - logTextarea.clientHeight) < 20;
+                        var oldScrollTop = logTextarea.scrollTop;
+
                         logTextarea.value = res.responseText;
-                        logTextarea.scrollTop = logTextarea.scrollHeight;
+
+                        // only auto-scroll if user was already at the bottom
+                        if (atBottom) {
+                            logTextarea.scrollTop = logTextarea.scrollHeight;
+                        } else {
+                            logTextarea.scrollTop = oldScrollTop;
+                        }
                     }
                 });
             };

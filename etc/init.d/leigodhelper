@@ -26,11 +26,12 @@ service_triggers() {
 
 install() {
     echo "Starting Leigod installation..."
-    curl -fsSL http://119.3.40.126/router_plugin_new/plugin_install.sh -o /tmp/plugin_install.sh
+    cd /tmp
+    sh -c "$(curl -fsSL http://119.3.40.126/router_plugin_new/plugin_install.sh)"
     if [ $? -eq 0 ]; then
-        sh /tmp/plugin_install.sh 2>&1
+        echo "Installation script executed"
     else
-        echo "Failed to download installation script"
+        echo "Failed to download/execute installation script"
     fi
 }
 
